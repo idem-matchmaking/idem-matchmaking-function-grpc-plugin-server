@@ -65,8 +65,8 @@ namespace AccelByte.PluginArch.Demo.Server.Services
             {
                 Match match = new Match();
                 match.RegionPreferences.Add("any");
-
-                foreach(var idemTeam in idemMatches.teams)
+                match.Tickets.AddRange(_UnmatchedTickets);
+                foreach (var idemTeam in idemMatches.teams)
                     match.Teams.Add(idemTeam.ToMatchTypeTeam());
 
                 matches.Add(match); 
