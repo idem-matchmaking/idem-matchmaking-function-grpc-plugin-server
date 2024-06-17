@@ -1,0 +1,10 @@
+Dockerfile
+Makefile
+.dotnet
+.local
+.nuget
+.env
+.cache/
+src/*/bin
+src/*/obj
+src/.vs
