@@ -90,6 +90,7 @@ namespace IdemUtils
 
         #endregion
 
+         public static int match_reloads = 5;
         public static class URLS
         {
             public const string DOMAIN = "https://cognito-idp.eu-central-1.amazonaws.com/";
@@ -155,8 +156,20 @@ namespace IdemUtils
 
         public static async Task<MatchPayload> GetMatches(string Idtoken, GameIDPayload gameIDPayload)
         {
-            var jsonData = await SendInternal(BuildAction("getMatches", JsonConvert.SerializeObject(gameIDPayload)), Idtoken);
-            return JsonConvert.DeserializeObject<MatchResponseData>(jsonData).payload;
+            var payload = new MatchPayload();   
+            for (int i = 0; i < match_reloads; i++)
+            {
+                var jsonData = await SendInternal(BuildAction("getMatches", JsonConvert.SerializeObject(gameIDPayload)), Idtoken);
+                payload = JsonConvert.DeserializeObject<MatchResponseData>(jsonData).payload;
+
+                if(payload.matches != null && payload.matches.Count > 0)
+                {
+                    return payload;
+                }
+                await Task.Delay(2000);
+            }
+
+            return payload;
         }
 
 
